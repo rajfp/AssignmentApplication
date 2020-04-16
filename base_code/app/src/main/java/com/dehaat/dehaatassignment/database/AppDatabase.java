@@ -2,11 +2,14 @@ package com.dehaat.dehaatassignment.database;
 
 import android.content.Context;
 
+import com.dehaat.dehaatassignment.model.Author;
+import com.dehaat.dehaatassignment.model.Book;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {},version = 1)
+@Database(entities = {Author.class, Book.class},version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;

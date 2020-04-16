@@ -22,19 +22,32 @@ public class AppRestClient {
     private static AppRestClient mInstance;
     int cacheSize = 10 * 1024 * 1024; // 10 MB
     private AppRestClientService appRestClientService;
+    private static Retrofit retrofit=null;
 
     private AppRestClient() {
         setRestClient();
     }
 
-    public static AppRestClient getInstance() {
-        if (mInstance == null) {
-            synchronized (AppRestClient.class) {
-                if (mInstance == null)
-                    mInstance = new AppRestClient();
-            }
+    public static Retrofit getInstance() {
+
+//        if (mInstance == null) {
+//            synchronized (AppRestClient.class) {
+//                if (mInstance == null)
+//                    mInstance = new AppRestClient();
+//            }
+//        }
+//        return mInstance;
+
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+        if(retrofit==null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:8080/") //ToDo: enter base url
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
         }
-        return mInstance;
+        return retrofit;
     }
 
     public static void setAppRestClientNull() {
@@ -47,7 +60,7 @@ public class AppRestClient {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("") //ToDo: enter base url
+                .baseUrl("http://localhost:8080/") //ToDo: enter base url
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
