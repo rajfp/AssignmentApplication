@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
@@ -21,7 +22,6 @@ import retrofit2.Response
  * A simple [Fragment] subclass.
  */
 class LoginFragment : Fragment() {
-    var restService:AppRestClient?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,26 +32,12 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         log_but.setOnClickListener{
             //validateUser(et_email.text.toString(),et_password.text.toString())
-            getAuthorsList();
+
+            var fragmentTransaction = fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(R.id.fragment_container, AuthorsFragment())
+            ?.addToBackStack(null)
+            fragmentTransaction?.commit()
         }
     }
-
-    private fun getAuthorsList() {
-        AppRestClient.setAppRestClientNull()
-        val appRestClientService=AppRestClient.getInstance().create(AppRestClientService::class.java)
-        val response = appRestClientService.fetchListOfAuthors()
-        response.enqueue( object:Callback<AuthorsResponseDto>{
-            override fun onFailure(call: Call<AuthorsResponseDto>, t: Throwable) {
-            Log.d("TAG", t.message)
-            }
-
-            override fun onResponse(call: Call<AuthorsResponseDto>, response: Response<AuthorsResponseDto>) {
-                Log.d("Success",response.toString())
-            }
-
-
-        })
-    }
-
 
 }
