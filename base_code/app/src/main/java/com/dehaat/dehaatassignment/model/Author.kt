@@ -7,4 +7,8 @@ import androidx.room.PrimaryKey
 data class Author(@PrimaryKey(autoGenerate = true) val uid:Int,
                   @ColumnInfo val author_name:String?,
                   @ColumnInfo val author_bio:String? ) {
+    constructor(author_name:String?,author_bio: String?):this(0,author_name,author_bio)
+
 }
+
+
