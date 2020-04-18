@@ -17,7 +17,7 @@ public interface BookDao {
     void insertAll(Book book);
 
     @Query("select * from Book where author_name = :authorName")
-    List<Book> getBooks(String authorName);
+    Book getBooks(String authorName);
 
 
 }

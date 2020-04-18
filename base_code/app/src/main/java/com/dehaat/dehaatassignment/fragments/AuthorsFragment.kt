@@ -83,10 +83,7 @@ class AuthorsFragment : Fragment() {
             return true
         }
 
-        override fun onPostExecute(result: Boolean?) {
-            super.onPostExecute(result)
-            Toast.makeText(activity,"Added Successfully to database",Toast.LENGTH_LONG).show()
-        }
+
     }
 
     inner class GetAuthors(private var context: Context) :  AsyncTask<Void, Void, Boolean>(){
