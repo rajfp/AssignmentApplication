@@ -3,6 +3,7 @@ package com.dehaat.dehaatassignment.rest;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.dehaat.dehaatassignment.model.Constants;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,7 +28,7 @@ public class AppRestClient {
                 .create();
         if(retrofit==null){
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080/") //ToDo: enter base url
+                    .baseUrl(Constants.URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
@@ -44,7 +45,7 @@ public class AppRestClient {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080/") //ToDo: enter base url
+                .baseUrl(Constants.URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 

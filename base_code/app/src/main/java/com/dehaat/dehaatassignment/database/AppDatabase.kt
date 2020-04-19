@@ -11,9 +11,10 @@ import com.dehaat.dehaatassignment.dao.AuthorDao
 import com.dehaat.dehaatassignment.dao.BookDao
 import com.dehaat.dehaatassignment.model.Author
 import com.dehaat.dehaatassignment.model.Book
+import com.dehaat.dehaatassignment.model.Constants
 
 
-@Database(entities = arrayOf(Author::class,Book::class), version = 3)
+@Database(entities = arrayOf(Author::class,Book::class), version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun authorDao(): AuthorDao
@@ -29,7 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
                 synchronized(AppDatabase::class.java) {
                     if (INSTANCE == null) {
                         INSTANCE = Room.databaseBuilder(context.applicationContext,
-                                AppDatabase::class.java, "dehaat_database").fallbackToDestructiveMigration().build()
+                                AppDatabase::class.java, Constants.my_database).fallbackToDestructiveMigration().build()
                     }
                 }
             }

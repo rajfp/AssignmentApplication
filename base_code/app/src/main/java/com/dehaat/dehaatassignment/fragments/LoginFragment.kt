@@ -31,7 +31,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         log_but.setOnClickListener{
-            //validateUser(et_email.text.toString(),et_password.text.toString())
 
             var fragmentTransaction = fragmentManager?.beginTransaction()
             fragmentTransaction?.replace(R.id.fragment_container, AuthorsFragment())

@@ -11,6 +11,7 @@ import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.activity.MainActivity
 import com.dehaat.dehaatassignment.fragments.BooksFragment
 import com.dehaat.dehaatassignment.model.AuthorsData
+import com.dehaat.dehaatassignment.model.Constants
 import kotlinx.android.synthetic.main.author_item_layout.view.*
 
 class AuthorAdapter(private val context: Context,private val authorList: List<AuthorsData>?) : RecyclerView.Adapter<AuthorAdapter.MyViewHolder>() {
@@ -31,7 +32,7 @@ class AuthorAdapter(private val context: Context,private val authorList: List<Au
             var ctx= context as MainActivity
             var booksFragment=BooksFragment()
             var bundle=Bundle()
-            bundle.putString("Author_Name",authorList?.get(position)?.author_name)
+            bundle.putString(Constants.author_name,authorList?.get(position)?.author_name)
             booksFragment.arguments=bundle
             ctx?.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,booksFragment,null).
             addToBackStack(null).commit()

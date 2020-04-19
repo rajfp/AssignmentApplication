@@ -39,7 +39,6 @@ class AuthorsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_authors, container, false)
     }
 
@@ -89,12 +88,6 @@ class AuthorsFragment : Fragment() {
     inner class GetAuthors(private var context: Context) :  AsyncTask<Void, Void, Boolean>(){
         override fun doInBackground(vararg params: Void?): Boolean {
             var list=appDatabase?.authorDao()?.authorsList
-
-            for (i in list!!) {
-                Log.d("Author Name", i.author_name)
-                var bookList=appDatabase?.bookDao()?.getBooks(i.author_name)
-                Log.d("Books by ${i.author_name}",bookList.toString())
-            }
             return true
         }
     }
