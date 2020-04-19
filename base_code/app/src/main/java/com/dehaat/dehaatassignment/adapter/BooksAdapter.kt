@@ -16,13 +16,13 @@ class BooksAdapter(private val context:Context,private val bookList: List<books>
     }
 
     override fun getItemCount(): Int {
-        return bookList.size
+        return bookList?.size
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        holder.title.text=bookList.get(position).title
-        holder.description.text=bookList.get(position).description
-        holder.price.text=bookList.get(position).price
+        holder.title.text=bookList?.get(position).title
+        holder.description.text=bookList?.get(position).description
+        holder.price.text=bookList?.get(position).price
     }
 
     class BookViewHolder(view: View) : RecyclerView.ViewHolder(view) {

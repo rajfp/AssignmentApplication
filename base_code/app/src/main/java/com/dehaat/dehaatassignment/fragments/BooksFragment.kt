@@ -18,14 +18,15 @@ import com.dehaat.dehaatassignment.database.AppDatabase
 import com.dehaat.dehaatassignment.model.Constants
 import com.dehaat.dehaatassignment.model.books
 import kotlinx.android.synthetic.main.fragment_books.*
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  */
-class BooksFragment : Fragment()  {
+class BooksFragment : BaseFragment() {
 
-    private var appDatabase: AppDatabase?=null
-    private lateinit var authorData:List<books>
+    private var appDatabase: AppDatabase? = null
+    private lateinit var authorData: List<books>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -39,31 +40,26 @@ class BooksFragment : Fragment()  {
     }
 
     private fun initViews() {
-        var toolbar=(activity as MainActivity).supportActionBar
-        toolbar?.title=getString(R.string.books)
+        var toolbar = (activity as MainActivity).supportActionBar
+        toolbar?.title = getString(R.string.books)
         toolbar?.setDisplayShowHomeEnabled(true)
         toolbar?.setDisplayShowTitleEnabled(true)
 
     }
 
     private fun fetchBooksList() {
-        appDatabase=activity?.let { AppDatabase.getDatabase(it) }
-        arguments?.getString(Constants.author_name)?.let { BookTask(activity as MainActivity, it).execute() }
-    }
+        appDatabase = activity?.let { AppDatabase.getDatabase(it) }
+        authorData=ArrayList()
+        launch {
+            authorData = arguments?.getString(Constants.author_name)?.let {
+                appDatabase?.bookDao()?.getBooks(it)?.bookList
 
-        inner class BookTask(private val context: MainActivity,private val authorName:String) : AsyncTask<Void,Void,Boolean>() {
-            override fun doInBackground(vararg params: Void?): Boolean {
-                authorData= appDatabase?.bookDao()?.getBooks(authorName)?.bookList!!
-                return true
-            }
-
-            override fun onPostExecute(result: Boolean?) {
-                super.onPostExecute(result)
-                var booksAdapter=BooksAdapter(context,authorData)
-                var layoutManager=LinearLayoutManager(context)
-                recycler_view_books.layoutManager=layoutManager
-                recycler_view_books.adapter=booksAdapter
-
-            }
+            }!!
+            var booksAdapter = activity?.let { BooksAdapter(it, authorData) }
+            var layoutManager = LinearLayoutManager(context)
+            recycler_view_books.layoutManager = layoutManager
+            recycler_view_books.adapter = booksAdapter
         }
+
+    }
 }
