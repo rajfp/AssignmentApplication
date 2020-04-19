@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.dehaat.dehaatassignment.R
+import com.dehaat.dehaatassignment.Utils.ValidationUtils
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
 import com.dehaat.dehaatassignment.rest.AppRestClient
 import com.dehaat.dehaatassignment.rest.AppRestClientService
@@ -32,10 +33,12 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         log_but.setOnClickListener{
 
-            var fragmentTransaction = fragmentManager?.beginTransaction()
-            fragmentTransaction?.replace(R.id.fragment_container, AuthorsFragment())
-            ?.addToBackStack(null)
-            fragmentTransaction?.commit()
+            if(ValidationUtils.validateUsername(et_email)!! && ValidationUtils.validatePassword(et_password)!!) {
+                var fragmentTransaction = fragmentManager?.beginTransaction()
+                fragmentTransaction?.replace(R.id.fragment_container, AuthorsFragment())
+                        ?.addToBackStack(null)
+                fragmentTransaction?.commit()
+            }
         }
     }
 
