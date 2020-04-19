@@ -11,6 +11,7 @@ import android.widget.Toast
 
 import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.Utils.ValidationUtils
+import com.dehaat.dehaatassignment.activity.MainActivity
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
 import com.dehaat.dehaatassignment.rest.AppRestClient
 import com.dehaat.dehaatassignment.rest.AppRestClientService
@@ -31,6 +32,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
         log_but.setOnClickListener{
 
             if(ValidationUtils.validateUsername(et_email)!! && ValidationUtils.validatePassword(et_password)!!) {
@@ -40,6 +42,14 @@ class LoginFragment : Fragment() {
                 fragmentTransaction?.commit()
             }
         }
+    }
+
+    private fun initViews() {
+        var toolbar=(activity as MainActivity).supportActionBar
+        toolbar?.title=getString(R.string.login)
+        toolbar?.setDisplayShowHomeEnabled(true)
+        toolbar?.setDisplayShowTitleEnabled(true)
+
     }
 
 }

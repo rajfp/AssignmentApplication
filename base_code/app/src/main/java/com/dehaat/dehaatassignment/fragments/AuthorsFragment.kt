@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.dehaat.dehaatassignment.R
+import com.dehaat.dehaatassignment.activity.MainActivity
 import com.dehaat.dehaatassignment.adapter.AuthorAdapter
 import com.dehaat.dehaatassignment.database.AppDatabase
 import com.dehaat.dehaatassignment.model.Author
@@ -44,8 +45,18 @@ class AuthorsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
        getAuthorsList();
     }
+
+    private fun initViews() {
+        var toolbar=(activity as MainActivity).supportActionBar
+        toolbar?.title=getString(R.string.authors)
+        toolbar?.setDisplayShowHomeEnabled(true)
+        toolbar?.setDisplayShowTitleEnabled(true)
+
+    }
+
     private fun getAuthorsList() {
         AppRestClient.setAppRestClientNull()
         val appRestClientService= AppRestClient.getInstance().create(AppRestClientService::class.java)
@@ -53,6 +64,7 @@ class AuthorsFragment : Fragment() {
         response.enqueue( object: Callback<AuthorsResponseDto> {
             override fun onFailure(call: Call<AuthorsResponseDto>, t: Throwable) {
                 Toast.makeText(activity,t.message, Toast.LENGTH_LONG).show()
+                activity?.onBackPressed()
             }
 
             override fun onResponse(call: Call<AuthorsResponseDto>, response: Response<AuthorsResponseDto>) {

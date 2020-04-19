@@ -34,7 +34,16 @@ class BooksFragment : Fragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
         fetchBooksList()
+    }
+
+    private fun initViews() {
+        var toolbar=(activity as MainActivity).supportActionBar
+        toolbar?.title=getString(R.string.books)
+        toolbar?.setDisplayShowHomeEnabled(true)
+        toolbar?.setDisplayShowTitleEnabled(true)
+
     }
 
     private fun fetchBooksList() {
