@@ -3,8 +3,12 @@ package com.dehaat.dehaatassignment.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dehaat.dehaatassignment.R
@@ -13,15 +17,13 @@ import com.dehaat.dehaatassignment.adapter.AuthorAdapter
 import com.dehaat.dehaatassignment.database.AppDatabase
 import com.dehaat.dehaatassignment.listener.LogoutListener
 import com.dehaat.dehaatassignment.model.Author
+import com.dehaat.dehaatassignment.model.AuthorsData
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
 import com.dehaat.dehaatassignment.model.Book
-import com.dehaat.dehaatassignment.rest.AppRestClient
-import com.dehaat.dehaatassignment.rest.AppRestClientService
+import com.dehaat.dehaatassignment.viewmodel.MyViewModel
 import kotlinx.android.synthetic.main.fragment_authors.*
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 /**
  * A simple [Fragment] subclass.
  */
@@ -30,11 +32,12 @@ class AuthorsFragment : BaseFragment() {
     private var recyclerAdapter: AuthorAdapter? = null
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private var appDatabase: AppDatabase? = null
-    private lateinit var listener:LogoutListener
+    private lateinit var listener: LogoutListener
+    private lateinit var myViewModel: MyViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener=context as LogoutListener
+        listener = context as LogoutListener
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,23 +66,21 @@ class AuthorsFragment : BaseFragment() {
     }
 
     private fun getAuthorsList() {
-        AppRestClient.setAppRestClientNull()
-        val appRestClientService = AppRestClient.getInstance().create(AppRestClientService::class.java)
-        val response = appRestClientService.fetchListOfAuthors()
-        response.enqueue(object : Callback<AuthorsResponseDto> {
-            override fun onFailure(call: Call<AuthorsResponseDto>, t: Throwable) {
-                activity?.onBackPressed()
-            }
 
-            override fun onResponse(call: Call<AuthorsResponseDto>, response: Response<AuthorsResponseDto>) {
-                layoutManager = LinearLayoutManager(activity)
-                recyclerAdapter = activity?.let { AuthorAdapter(it, response.body()?.data) }
-                recycler_view.layoutManager = layoutManager
-                recycler_view.adapter = recyclerAdapter
-                saveData(response.body())
+        myViewModel = MyViewModel()
+        myViewModel.getAuthorList().observe(viewLifecycleOwner, Observer { t ->
+            t.data?.let {
+                setRecyclerView(it)
+                saveData(t)
             }
-
         })
+    }
+
+    private fun setRecyclerView(data: List<AuthorsData>) {
+        layoutManager = LinearLayoutManager(activity)
+        recyclerAdapter = activity?.let { AuthorAdapter(it, data) }
+        recycler_view.layoutManager = layoutManager
+        recycler_view.adapter = recyclerAdapter
     }
 
     private fun saveData(body: AuthorsResponseDto?) {
@@ -104,8 +105,6 @@ class AuthorsFragment : BaseFragment() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }
 
 
