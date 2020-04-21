@@ -2,47 +2,45 @@ package com.dehaat.dehaatassignment.fragments
 
 
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.activity.MainActivity
 import com.dehaat.dehaatassignment.adapter.AuthorAdapter
 import com.dehaat.dehaatassignment.database.AppDatabase
+import com.dehaat.dehaatassignment.listener.LogoutListener
 import com.dehaat.dehaatassignment.model.Author
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
 import com.dehaat.dehaatassignment.model.Book
 import com.dehaat.dehaatassignment.rest.AppRestClient
 import com.dehaat.dehaatassignment.rest.AppRestClientService
 import kotlinx.android.synthetic.main.fragment_authors.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.coroutines.CoroutineContext
-import kotlin.math.log
-
 /**
  * A simple [Fragment] subclass.
  */
 class AuthorsFragment : BaseFragment() {
 
-
     private var recyclerAdapter: AuthorAdapter? = null
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private var appDatabase: AppDatabase? = null
+    private lateinit var listener:LogoutListener
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener=context as LogoutListener
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -93,6 +91,20 @@ class AuthorsFragment : BaseFragment() {
             }
         }
     }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        activity?.menuInflater?.inflate(R.menu.mymenu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout_btn -> {
+                listener?.onLogout()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 }
 

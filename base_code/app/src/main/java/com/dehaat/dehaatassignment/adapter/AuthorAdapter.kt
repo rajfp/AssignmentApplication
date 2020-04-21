@@ -28,7 +28,6 @@ class AuthorAdapter(private val context: Context,private val authorList: List<Au
         holder.authorName.text=authorList?.get(position)?.author_name
         holder.authorBio.text=authorList?.get(position)?.author_bio
         holder.clickView.setOnClickListener{
-            Toast.makeText(context,authorList?.get(position)?.author_name,Toast.LENGTH_LONG).show()
             var ctx= context as MainActivity
             var booksFragment=BooksFragment()
             var bundle=Bundle()

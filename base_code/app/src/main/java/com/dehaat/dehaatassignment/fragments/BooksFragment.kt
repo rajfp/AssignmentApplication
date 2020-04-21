@@ -2,19 +2,15 @@ package com.dehaat.dehaatassignment.fragments
 
 
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.activity.MainActivity
 import com.dehaat.dehaatassignment.adapter.BooksAdapter
 import com.dehaat.dehaatassignment.database.AppDatabase
+import com.dehaat.dehaatassignment.listener.LogoutListener
 import com.dehaat.dehaatassignment.model.Constants
 import com.dehaat.dehaatassignment.model.books
 import kotlinx.android.synthetic.main.fragment_books.*
@@ -27,6 +23,20 @@ class BooksFragment : BaseFragment() {
 
     private var appDatabase: AppDatabase? = null
     private lateinit var authorData: List<books>
+    private lateinit var listener:LogoutListener
+
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener=context as LogoutListener
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -61,5 +71,18 @@ class BooksFragment : BaseFragment() {
             recycler_view_books.adapter = booksAdapter
         }
 
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        activity?.menuInflater?.inflate(R.menu.mymenu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout_btn -> {
+                listener?.onLogout()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
