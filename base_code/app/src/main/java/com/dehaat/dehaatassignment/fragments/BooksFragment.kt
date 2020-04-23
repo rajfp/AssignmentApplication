@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.activity.MainActivity
@@ -13,6 +14,7 @@ import com.dehaat.dehaatassignment.database.AppDatabase
 import com.dehaat.dehaatassignment.listener.LogoutListener
 import com.dehaat.dehaatassignment.model.Constants
 import com.dehaat.dehaatassignment.model.books
+import com.dehaat.dehaatassignment.viewmodel.MyViewModel
 import kotlinx.android.synthetic.main.fragment_books.*
 import kotlinx.coroutines.launch
 
@@ -21,9 +23,9 @@ import kotlinx.coroutines.launch
  */
 class BooksFragment : BaseFragment() {
 
-    private var appDatabase: AppDatabase? = null
     private lateinit var authorData: List<books>
     private lateinit var listener:LogoutListener
+    private lateinit var myViewModel: MyViewModel
 
 
 
@@ -36,6 +38,7 @@ class BooksFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        myViewModel = activity?.application?.let { MyViewModel(it) }!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,20 +61,20 @@ class BooksFragment : BaseFragment() {
     }
 
     private fun fetchBooksList() {
-        appDatabase = activity?.let { AppDatabase.getDatabase(it) }
-        authorData=ArrayList()
-        launch {
-            authorData = arguments?.getString(Constants.author_name)?.let {
-                appDatabase?.bookDao()?.getBooks(it)?.bookList
 
-            }!!
+        authorData=ArrayList()
+        var authorName=arguments?.getString(Constants.author_name)
+        myViewModel.getBookList(authorName)?.observe(viewLifecycleOwner, Observer {
+            t->
+            authorData= t.bookList!!
             var booksAdapter = activity?.let { BooksAdapter(it, authorData) }
             var layoutManager = LinearLayoutManager(context)
             recycler_view_books.layoutManager = layoutManager
             recycler_view_books.adapter = booksAdapter
+        })
         }
 
-    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.mymenu, menu)
         super.onCreateOptionsMenu(menu, inflater)

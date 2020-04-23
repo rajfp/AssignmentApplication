@@ -1,6 +1,7 @@
 package com.dehaat.dehaatassignment.fragments
 
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -31,7 +32,6 @@ class AuthorsFragment : BaseFragment() {
 
     private var recyclerAdapter: AuthorAdapter? = null
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private var appDatabase: AppDatabase? = null
     private lateinit var listener: LogoutListener
     private lateinit var myViewModel: MyViewModel
 
@@ -67,11 +67,11 @@ class AuthorsFragment : BaseFragment() {
 
     private fun getAuthorsList() {
 
-        myViewModel = MyViewModel()
+        myViewModel = activity?.application?.let { MyViewModel(it) }!!
         myViewModel.getAuthorList().observe(viewLifecycleOwner, Observer { t ->
-            t.data?.let {
+            t?.data?.let {
                 setRecyclerView(it)
-                saveData(t)
+                myViewModel.setAuthorInfo(t)
             }
         })
     }
@@ -83,15 +83,7 @@ class AuthorsFragment : BaseFragment() {
         recycler_view.adapter = recyclerAdapter
     }
 
-    private fun saveData(body: AuthorsResponseDto?) {
-        appDatabase = activity?.let { AppDatabase.getDatabase(it) }
-        launch {
-            for (i in body?.data!!) {
-                appDatabase?.authorDao()?.insertAllAuthors(Author(i.author_name, i.author_bio))
-                appDatabase?.bookDao()?.insertAll(Book(i.author_name, i.books))
-            }
-        }
-    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.mymenu, menu)
         super.onCreateOptionsMenu(menu, inflater)
