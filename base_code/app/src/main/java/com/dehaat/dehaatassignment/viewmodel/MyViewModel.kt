@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
 import com.dehaat.dehaatassignment.repository.MyRepository
 
-class MyViewModel(private val application: Application): ViewModel() {
+class MyViewModel(application: Application): ViewModel() {
     private var myRepository:MyRepository
     private var authorData: MutableLiveData<AuthorsResponseDto>
 
