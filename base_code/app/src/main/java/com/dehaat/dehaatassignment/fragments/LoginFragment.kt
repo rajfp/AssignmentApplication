@@ -61,4 +61,9 @@ class LoginFragment : Fragment() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        log_but.setOnClickListener(null)
+    }
+
 }
