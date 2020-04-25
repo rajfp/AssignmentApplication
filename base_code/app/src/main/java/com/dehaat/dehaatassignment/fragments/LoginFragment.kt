@@ -1,6 +1,7 @@
 package com.dehaat.dehaatassignment.fragments
 
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.widget.Toast
 import com.dehaat.dehaatassignment.R
 import com.dehaat.dehaatassignment.Utils.ValidationUtils
 import com.dehaat.dehaatassignment.activity.MainActivity
+import com.dehaat.dehaatassignment.listener.SessionListener
 import com.dehaat.dehaatassignment.model.AuthorsResponseDto
 import com.dehaat.dehaatassignment.rest.AppRestClient
 import com.dehaat.dehaatassignment.rest.AppRestClientService
@@ -25,6 +27,13 @@ import retrofit2.Response
  */
 class LoginFragment : Fragment() {
 
+    var sessionListener:SessionListener?=null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sessionListener=context as MainActivity
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
@@ -36,9 +45,9 @@ class LoginFragment : Fragment() {
         log_but.setOnClickListener{
 
             if(ValidationUtils.validateUsername(et_email)!! && ValidationUtils.validatePassword(et_password)!!) {
+                sessionListener?.createSession()
                 var fragmentTransaction = fragmentManager?.beginTransaction()
                 fragmentTransaction?.replace(R.id.fragment_container, AuthorsFragment())
-                        ?.addToBackStack(null)
                 fragmentTransaction?.commit()
             }
         }

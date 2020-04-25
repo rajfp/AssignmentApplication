@@ -76,6 +76,7 @@ class BooksFragment : BaseFragment() {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         activity?.menuInflater?.inflate(R.menu.mymenu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }

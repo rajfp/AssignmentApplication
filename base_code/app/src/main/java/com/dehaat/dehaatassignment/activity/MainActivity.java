@@ -9,10 +9,11 @@ import com.dehaat.dehaatassignment.SessionManage.SessionManager;
 import com.dehaat.dehaatassignment.fragments.AuthorsFragment;
 import com.dehaat.dehaatassignment.fragments.LoginFragment;
 import com.dehaat.dehaatassignment.listener.LogoutListener;
+import com.dehaat.dehaatassignment.listener.SessionListener;
 
-public class MainActivity extends AppCompatActivity implements LogoutListener {
+public class MainActivity extends AppCompatActivity implements LogoutListener, SessionListener {
 
-    SessionManager sessionManager;
+    public SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements LogoutListener {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new AuthorsFragment(), null).commit();
 
         else {
-            sessionManager.createLoginSession();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LoginFragment(), null).commit();
         }
     }
@@ -58,5 +58,16 @@ public class MainActivity extends AppCompatActivity implements LogoutListener {
         sessionManager.destroySession();
         finish();
         startActivity(getIntent());
+    }
+
+    @Override
+    public void createSession() {
+        if(!sessionManager.isLoggedIn())
+        sessionManager.createLoginSession();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
